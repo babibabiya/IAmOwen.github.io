@@ -23,7 +23,7 @@ const PAGES = {
   projects: [...document.querySelectorAll('[data-section="projects"]')],
   help:     [...document.querySelectorAll('[data-section="help"]')],
 };
-const ORDER = ['home', 'about', 'projects', 'help'];
+const ORDER = ['home', 'about', 'help', 'projects'];
 
 const state = { section: 'home', index: 0 };
 let locked = false;               // 翻页动画期间锁输入
