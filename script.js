@@ -21,8 +21,9 @@ const PAGES = {
   home:     [...document.querySelectorAll('[data-section="home"]')],
   about:    [...document.querySelectorAll('[data-section="about"]')],
   projects: [...document.querySelectorAll('[data-section="projects"]')],
+  help:     [...document.querySelectorAll('[data-section="help"]')],
 };
-const ORDER = ['home', 'about', 'projects'];
+const ORDER = ['home', 'about', 'projects', 'help'];
 
 const state = { section: 'home', index: 0 };
 let locked = false;               // 翻页动画期间锁输入
@@ -322,6 +323,15 @@ function maybePlayIntro() {
   }
   introWasActive = isIntro;
 }
+
+/* ---------- 5c. Help 卡片展开 / 收起（活动详情） ---------- */
+document.querySelectorAll('.help-head').forEach((head) => {
+  head.addEventListener('click', () => {
+    const card = head.closest('.help-card');
+    const open = card.classList.toggle('open');
+    head.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+});
 
 /* ---------- 6. 初始渲染 ---------- */
 render();

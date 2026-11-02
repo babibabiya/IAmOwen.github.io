@@ -134,17 +134,17 @@ button{
 
 /* ---------- shared: bottom nav ---------- */
 .nav{
-  left:790px;
+  left:660px;
   top:806px;
   display:flex;
-  gap:32px;
+  gap:26px;
   font-size:50px;
   line-height:1.25;   /* Figma: 62.5px / 50px */
   color:var(--teal);
   white-space:nowrap;
 }
 /* Hero 页的菜单在 Figma 中整体右移 5px、下移 1px */
-#page-hero .nav{ left:795px; top:807px; }
+#page-hero .nav{ left:665px; top:807px; }
 .nav a,
 .nav button{
   position:relative;
@@ -707,6 +707,122 @@ button{
 .prj-link:hover{color:#FFFFFF}
 .prj-links .prj-link:nth-child(1){left:0}
 .prj-links .prj-link:nth-child(2){left:261px}
+
+/* =========================================================
+   HELP · ASK ME / I CAN HELP / LEARN WITH ME
+   ========================================================= */
+.help-kicker{
+  left:150px; top:76px;
+  font-size:28px;
+  line-height:1.25;
+  color:var(--teal);
+  white-space:nowrap;
+}
+.help-title{
+  left:150px; top:120px;
+  font-size:70px;
+  font-weight:400;
+  line-height:1.25;   /* Figma 惯例 1.25 */
+  color:var(--deep);
+  white-space:nowrap;
+}
+
+.help-card{
+  position:absolute;
+  top:290px;
+  width:600px;
+  background:#FFFFFF;
+  border-radius:24px;
+  box-shadow:0 10px 32px rgba(13,124,107,.13);
+  overflow:hidden;
+}
+.hc-code{left:96px}
+.hc-play{left:744px}
+
+.help-head{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:24px;
+  width:100%;
+  padding:30px 34px;
+  text-align:left;
+  transition:background .25s ease;
+}
+.help-head:hover{background:#F1FCF8}
+
+.help-icon{
+  flex:none;
+  width:66px; height:66px;
+  border-radius:50%;
+  background:var(--tag);
+  display:grid;
+  place-items:center;
+}
+.help-icon svg{width:40px; height:34px; display:block}
+
+.help-headtext{display:flex; flex-direction:column; gap:6px}
+.help-name{
+  font-size:36px;
+  line-height:1.25;
+  color:var(--deep);
+  white-space:nowrap;
+}
+.help-who{
+  font-size:21px;
+  line-height:1.25;
+  color:var(--gray);
+  white-space:nowrap;
+}
+
+.help-arrow{
+  position:absolute;
+  right:34px; top:50%;
+  width:30px; height:30px;
+  transform:translateY(-50%);
+  transition:transform .3s ease;
+}
+.help-arrow::before{
+  content:'+';
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  font-size:34px;
+  line-height:1;
+  font-weight:300;
+  color:var(--deep);
+}
+.help-card.open .help-arrow{transform:translateY(-50%) rotate(45deg)}
+
+.help-detail{
+  max-height:0;
+  opacity:0;
+  overflow:hidden;
+  padding:0 34px;
+  transition:max-height .45s ease, opacity .35s ease;
+}
+.help-card.open .help-detail{
+  max-height:340px;
+  opacity:1;
+  padding:0 34px 26px;
+}
+
+.hd-row{
+  display:flex;
+  gap:18px;
+  padding:10px 0;
+  border-top:1px solid rgba(13,124,107,.14);
+  font-size:20px;
+  line-height:1.25;
+}
+.hd-k{
+  flex:none;
+  width:132px;
+  color:var(--deep);
+  font-weight:700;
+}
+.hd-v{color:var(--ink)}
 
 /* =========================================================
    MODAL
