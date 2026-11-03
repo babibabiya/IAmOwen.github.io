@@ -709,32 +709,29 @@ button{
 .prj-links .prj-link:nth-child(2){left:261px}
 
 /* =========================================================
-   HELP · ASK ME / I CAN HELP / LEARN WITH ME
+   HELP · 内嵌在 About STATS 页信息栏下面
    ========================================================= */
 .help-kicker{
-  left:150px; top:76px;
-  font-size:28px;
+  left:96px; top:664px;
+  font-size:16px;
   line-height:1.25;
   color:var(--teal);
   white-space:nowrap;
 }
 .help-title{
-  left:150px; top:120px;
-  font-size:70px;
+  left:96px; top:686px;
+  font-size:26px;
   font-weight:400;
-  line-height:1.25;   /* Figma 惯例 1.25 */
+  line-height:1.25;
   color:var(--deep);
   white-space:nowrap;
 }
 
 .help-card{
   position:absolute;
-  top:290px;
+  top:726px;
   width:400px;
-  background:#FFFFFF;
-  border-radius:24px;
-  box-shadow:0 10px 32px rgba(13,124,107,.13);
-  overflow:hidden;
+  z-index:5;
 }
 .hc-code{left:96px}
 .hc-play{left:520px}
@@ -744,33 +741,36 @@ button{
   position:relative;
   display:flex;
   align-items:center;
-  gap:18px;
+  gap:12px;
   width:100%;
-  padding:26px 26px;
+  padding:12px 20px;
   text-align:left;
+  background:#FFFFFF;
+  border-radius:20px;
+  box-shadow:0 8px 26px rgba(13,124,107,.13);
   transition:background .25s ease;
 }
 .help-head:hover{background:#F1FCF8}
 
 .help-icon{
   flex:none;
-  width:58px; height:58px;
+  width:40px; height:40px;
   border-radius:50%;
   background:var(--tag);
   display:grid;
   place-items:center;
 }
-.help-icon svg{width:40px; height:34px; display:block}
+.help-icon svg{width:28px; height:24px; display:block}
 
-.help-headtext{display:flex; flex-direction:column; gap:6px; min-width:0}
+.help-headtext{display:flex; flex-direction:column; gap:2px; min-width:0}
 .help-name{
-  font-size:28px;
+  font-size:19px;
   line-height:1.2;
   color:var(--deep);
-  white-space:normal;
+  white-space:nowrap;
 }
 .help-who{
-  font-size:18px;
+  font-size:12px;
   line-height:1.25;
   color:var(--gray);
   white-space:normal;
@@ -778,8 +778,8 @@ button{
 
 .help-arrow{
   position:absolute;
-  right:22px; top:50%;
-  width:28px; height:28px;
+  right:16px; top:50%;
+  width:20px; height:20px;
   transform:translateY(-50%);
   transition:transform .3s ease;
 }
@@ -789,37 +789,45 @@ button{
   inset:0;
   display:grid;
   place-items:center;
-  font-size:30px;
+  font-size:24px;
   line-height:1;
   font-weight:300;
   color:var(--deep);
 }
 .help-card.open .help-arrow{transform:translateY(-50%) rotate(45deg)}
 
+/* 详情向上弹出（覆盖在人物/信息栏上方），不撑开布局、不压到底部菜单 */
 .help-detail{
+  position:absolute;
+  left:0; right:0;
+  bottom:100%;
+  margin-bottom:8px;
   max-height:0;
   opacity:0;
   overflow:hidden;
-  padding:0 26px;
-  transition:max-height .45s ease, opacity .35s ease;
+  padding:0 20px;
+  background:#FFFFFF;
+  border-radius:20px;
+  box-shadow:0 8px 26px rgba(13,124,107,.13);
+  transition:max-height .4s ease, opacity .3s ease;
 }
 .help-card.open .help-detail{
-  max-height:500px;
+  max-height:300px;
   opacity:1;
-  padding:0 26px 22px;
+  padding:14px 20px;
 }
 
 .hd-row{
   display:flex;
-  gap:14px;
-  padding:9px 0;
+  gap:12px;
+  padding:6px 0;
   border-top:1px solid rgba(13,124,107,.14);
-  font-size:18px;
+  font-size:16px;
   line-height:1.25;
 }
 .hd-k{
   flex:none;
-  width:104px;
+  width:96px;
   color:var(--deep);
   font-weight:700;
 }
