@@ -581,9 +581,24 @@ button{
 /* =========================================================
    07 · PROJECTS (select)  /  08 · PROJECT DETAIL
    ========================================================= */
-.lines-a{left:0; top:0; width:361px}
-.lines-b{left:1214px; top:595px; width:222px}
+.lines-a{left:0; top:0; width:361px; height:465px}
+.lines-b{left:1214px; top:595px; width:222px; height:320px}
 .p-lines-b{left:1220px; top:582px}
+
+/* 光在线里流动 */
+.flow{
+  fill:none;
+  stroke:#E9FFFB;
+  stroke-width:2.8;
+  stroke-linecap:round;
+  stroke-dasharray:46 560;
+  filter:drop-shadow(0 0 6px rgba(10,215,185,.9));
+  animation:lineflow 2.6s linear infinite;
+}
+@keyframes lineflow{to{stroke-dashoffset:-606}}
+@media (prefers-reduced-motion: reduce){
+  .flow{animation:none}
+}
 
 .sel-kicker{
   left:469px; top:63px;
