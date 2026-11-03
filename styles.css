@@ -134,17 +134,17 @@ button{
 
 /* ---------- shared: bottom nav ---------- */
 .nav{
-  left:660px;
+  left:790px;
   top:806px;
   display:flex;
-  gap:26px;
+  gap:32px;
   font-size:50px;
   line-height:1.25;   /* Figma: 62.5px / 50px */
   color:var(--teal);
   white-space:nowrap;
 }
 /* Hero 页的菜单在 Figma 中整体右移 5px、下移 1px */
-#page-hero .nav{ left:665px; top:807px; }
+#page-hero .nav{ left:795px; top:807px; }
 .nav a,
 .nav button{
   position:relative;
@@ -709,29 +709,52 @@ button{
 .prj-links .prj-link:nth-child(2){left:261px}
 
 /* =========================================================
-   HELP · 内嵌在 About STATS 页信息栏下面
+   HELP · 独立页 + STATS 页信息栏下方的跳转按钮
    ========================================================= */
+/* Stats 页信息栏下方的 HELP 跳转按钮 */
+.help-jump{
+  position:absolute;
+  left:931px; top:552px;
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 30px;
+  border-radius:26px;
+  background:var(--tag);
+  color:#FFFFFF;
+  font-size:24px;
+  line-height:1;
+  white-space:nowrap;
+  cursor:pointer;
+  transition:opacity .25s ease;
+}
+.help-jump:hover{opacity:.82}
+.help-jump .jump-arrow{font-size:20px; line-height:1}
+
 .help-kicker{
-  left:96px; top:664px;
-  font-size:16px;
+  left:150px; top:76px;
+  font-size:28px;
   line-height:1.25;
   color:var(--teal);
   white-space:nowrap;
 }
 .help-title{
-  left:96px; top:686px;
-  font-size:26px;
+  left:150px; top:120px;
+  font-size:70px;
   font-weight:400;
-  line-height:1.25;
+  line-height:1.25;   /* Figma 惯例 1.25 */
   color:var(--deep);
   white-space:nowrap;
 }
 
 .help-card{
   position:absolute;
-  top:726px;
+  top:290px;
   width:400px;
-  z-index:5;
+  background:#FFFFFF;
+  border-radius:24px;
+  box-shadow:0 10px 32px rgba(13,124,107,.13);
+  overflow:hidden;
 }
 .hc-code{left:96px}
 .hc-play{left:520px}
@@ -741,36 +764,33 @@ button{
   position:relative;
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:18px;
   width:100%;
-  padding:12px 20px;
+  padding:26px 26px;
   text-align:left;
-  background:#FFFFFF;
-  border-radius:20px;
-  box-shadow:0 8px 26px rgba(13,124,107,.13);
   transition:background .25s ease;
 }
 .help-head:hover{background:#F1FCF8}
 
 .help-icon{
   flex:none;
-  width:40px; height:40px;
+  width:58px; height:58px;
   border-radius:50%;
   background:var(--tag);
   display:grid;
   place-items:center;
 }
-.help-icon svg{width:28px; height:24px; display:block}
+.help-icon svg{width:40px; height:34px; display:block}
 
-.help-headtext{display:flex; flex-direction:column; gap:2px; min-width:0}
+.help-headtext{display:flex; flex-direction:column; gap:6px; min-width:0}
 .help-name{
-  font-size:19px;
+  font-size:28px;
   line-height:1.2;
   color:var(--deep);
-  white-space:nowrap;
+  white-space:normal;
 }
 .help-who{
-  font-size:12px;
+  font-size:18px;
   line-height:1.25;
   color:var(--gray);
   white-space:normal;
@@ -778,8 +798,8 @@ button{
 
 .help-arrow{
   position:absolute;
-  right:16px; top:50%;
-  width:20px; height:20px;
+  right:22px; top:50%;
+  width:28px; height:28px;
   transform:translateY(-50%);
   transition:transform .3s ease;
 }
@@ -789,45 +809,37 @@ button{
   inset:0;
   display:grid;
   place-items:center;
-  font-size:24px;
+  font-size:30px;
   line-height:1;
   font-weight:300;
   color:var(--deep);
 }
 .help-card.open .help-arrow{transform:translateY(-50%) rotate(45deg)}
 
-/* 详情向上弹出（覆盖在人物/信息栏上方），不撑开布局、不压到底部菜单 */
 .help-detail{
-  position:absolute;
-  left:0; right:0;
-  bottom:100%;
-  margin-bottom:8px;
   max-height:0;
   opacity:0;
   overflow:hidden;
-  padding:0 20px;
-  background:#FFFFFF;
-  border-radius:20px;
-  box-shadow:0 8px 26px rgba(13,124,107,.13);
-  transition:max-height .4s ease, opacity .3s ease;
+  padding:0 26px;
+  transition:max-height .45s ease, opacity .35s ease;
 }
 .help-card.open .help-detail{
-  max-height:300px;
+  max-height:500px;
   opacity:1;
-  padding:14px 20px;
+  padding:0 26px 22px;
 }
 
 .hd-row{
   display:flex;
-  gap:12px;
-  padding:6px 0;
+  gap:14px;
+  padding:9px 0;
   border-top:1px solid rgba(13,124,107,.14);
-  font-size:16px;
+  font-size:18px;
   line-height:1.25;
 }
 .hd-k{
   flex:none;
-  width:96px;
+  width:104px;
   color:var(--deep);
   font-weight:700;
 }
