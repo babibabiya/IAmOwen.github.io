@@ -711,25 +711,27 @@ button{
 /* =========================================================
    HELP · 独立页 + STATS 页信息栏下方的跳转按钮
    ========================================================= */
-/* Stats 页信息栏下方的 HELP 跳转按钮 */
+/* Stats 页信息栏下方的 HELP 跳转按钮（参照 Profile 页 STORY/ACHIEVEMENTS 药丸按钮，横向占满信息栏宽度） */
 .help-jump{
   position:absolute;
   left:931px; top:552px;
-  display:inline-flex;
+  width:402px;
+  height:59px;
+  display:flex;
   align-items:center;
-  gap:14px;
-  padding:14px 30px;
-  border-radius:26px;
-  background:var(--tag);
-  color:#FFFFFF;
+  justify-content:center;
+  gap:12px;
+  border-radius:33px;
+  background:#93DFD1;
+  color:var(--deep);
   font-size:24px;
   line-height:1;
   white-space:nowrap;
   cursor:pointer;
-  transition:opacity .25s ease;
+  transition:background .25s ease, color .25s ease;
 }
-.help-jump:hover{opacity:.82}
-.help-jump .jump-arrow{font-size:20px; line-height:1}
+.help-jump:hover{background:var(--deep); color:#FFFFFF}
+.help-jump .jump-arrow{font-size:22px; line-height:1}
 
 .help-kicker{
   left:150px; top:76px;
