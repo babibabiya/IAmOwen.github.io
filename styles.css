@@ -714,8 +714,8 @@ button{
 /* Stats 页信息栏下方的 HELP 跳转按钮（参照 Profile 页 STORY/ACHIEVEMENTS 药丸按钮，横向占满信息栏宽度） */
 .help-jump{
   position:absolute;
-  left:931px; top:552px;
-  width:402px;
+  left:945px; top:552px;
+  width:391px;
   height:59px;
   display:flex;
   align-items:center;
