@@ -343,34 +343,37 @@ let projLoadingTimers = [];
 function startProjectLoading() {
   if (!projLoadingEl || !pwWelcomeEl) return;
 
-  // 清掉上一次未完成的定时器，并复位到初始态（欢迎语大、居中）
+  // 清掉上一次未完成的定时器，并复位到初始态（进度条阶段）
   projLoadingTimers.forEach(clearTimeout);
   projLoadingTimers = [];
-  projLoadingEl.classList.remove('morph', 'hide');
+  projLoadingEl.classList.remove('morph', 'hide', 'stage2');
   pwWelcomeEl.style.transform = '';
-  pwWelcomeEl.style.opacity = '';
   void projLoadingEl.offsetWidth;   // 强制回流，确保复位后再触发过渡
 
-  // 阶段 1：welcome 停留约 2s
+  // 阶段 A：横向进度条滚动约 1.4s
   projLoadingTimers.push(setTimeout(() => {
-    // 计算从「居中」到 kicker 的位移与缩放（画布坐标，需除以缩放系数 s）
-    const kicker = document.querySelector('#page-projects .sel-kicker');
-    if (kicker) {
-      const s = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--s')) || 1;
-      const w = pwWelcomeEl.getBoundingClientRect();
-      const k = kicker.getBoundingClientRect();
-      const scale = k.height / w.height;
-      const dx = (k.left - w.left) / s;
-      const dy = (k.top - w.top) / s;
-      pwWelcomeEl.style.transformOrigin = 'top left';
-      pwWelcomeEl.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
-    }
-    projLoadingEl.classList.add('morph');
-    // 阶段 2：过渡完成后再整体淡出，露出真实页面
+    // 阶段 B：进度条淡出，welcome 淡入，停留约 1.8s
+    projLoadingEl.classList.add('stage2');
     projLoadingTimers.push(setTimeout(() => {
-      projLoadingEl.classList.add('hide');
-    }, 950));
-  }, 2000));
+      // 阶段 C：welcome 上移缩小，变成 kicker
+      const kicker = document.querySelector('#page-projects .sel-kicker');
+      if (kicker) {
+        const s = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--s')) || 1;
+        const w = pwWelcomeEl.getBoundingClientRect();
+        const k = kicker.getBoundingClientRect();
+        const scale = k.height / w.height;
+        const dx = (k.left - w.left) / s;
+        const dy = (k.top - w.top) / s;
+        pwWelcomeEl.style.transformOrigin = 'top left';
+        pwWelcomeEl.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+      }
+      projLoadingEl.classList.add('morph');
+      // 阶段 D：整体淡出，露出真实页面
+      projLoadingTimers.push(setTimeout(() => {
+        projLoadingEl.classList.add('hide');
+      }, 950));
+    }, 1800));
+  }, 1400));
 }
 
 /* ---------- 6. 初始渲染 ---------- */
