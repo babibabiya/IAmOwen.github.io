@@ -585,20 +585,66 @@ button{
 .lines-b{left:1214px; top:595px; width:222px; height:320px}
 .p-lines-b{left:1220px; top:582px}
 
-/* 光在线里流动 */
+/* 光在线里流动（两端柔和渐变、降低亮度、放慢速度） */
 .flow{
   fill:none;
-  stroke:#E9FFFB;
-  stroke-width:2.8;
+  stroke:#8FFFE8;
+  stroke-width:3;
   stroke-linecap:round;
-  stroke-dasharray:46 560;
-  filter:drop-shadow(0 0 6px rgba(10,215,185,.9));
-  animation:lineflow 2.6s linear infinite;
+  stroke-dasharray:56 640;
+  opacity:.6;
+  filter:blur(2px);
+  animation:lineflow 4.8s linear infinite;
 }
-@keyframes lineflow{to{stroke-dashoffset:-606}}
+@keyframes lineflow{to{stroke-dashoffset:-696}}
 @media (prefers-reduced-motion: reduce){
   .flow{animation:none}
 }
+
+/* =========================================================
+   PROJECTS 进入加载动画（welcome → 上移缩小 → 变成 kicker）
+   ========================================================= */
+.proj-loading{
+  position:absolute;
+  inset:0;
+  z-index:50;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--dark);
+  opacity:1;
+  transition:opacity .55s ease;
+}
+.proj-loading.hide{
+  opacity:0;
+  pointer-events:none;
+}
+.pw-welcome{
+  font-size:46px;
+  line-height:1.25;
+  color:#C9FFF6;
+  white-space:nowrap;
+  text-align:center;
+  will-change:transform;
+  transition:transform .9s cubic-bezier(.5,.05,.25,1),
+             opacity .8s ease,
+             color .8s ease;
+}
+.proj-loading.morph .pw-welcome{
+  color:#0AD7B9;
+  opacity:0;
+}
+.pw-final{
+  position:absolute;
+  left:469px; top:63px;
+  font-size:32px;
+  line-height:1.25;
+  color:#0AD7B9;
+  white-space:nowrap;
+  opacity:0;
+  transition:opacity .6s ease .45s;
+}
+.proj-loading.morph .pw-final{opacity:1}
 
 .sel-kicker{
   left:469px; top:63px;

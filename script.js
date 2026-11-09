@@ -68,10 +68,12 @@ function go(section, index = 0) {
   if (!PAGES[section]) return;
   index = Math.max(0, Math.min(index, PAGES[section].length - 1));
   if (section === state.section && index === state.index) return;
+  const enteringProjectsSelect = (section === 'projects' && index === 0 && state.section !== 'projects');
   state.section = section;
   state.index = index;
   setIntroScrolled(false);   // 切页时 intro 滚回顶部
   render();
+  if (enteringProjectsSelect) startProjectLoading();
 }
 
 function move(delta) {
@@ -332,6 +334,44 @@ document.querySelectorAll('.help-head').forEach((head) => {
     head.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
 });
+
+/* ---------- 5d. PROJECTS 进入加载动画：welcome → 上移缩小 → 变成 kicker ---------- */
+const projLoadingEl = document.getElementById('proj-loading');
+const pwWelcomeEl = document.getElementById('pw-welcome');
+let projLoadingTimers = [];
+
+function startProjectLoading() {
+  if (!projLoadingEl || !pwWelcomeEl) return;
+
+  // 清掉上一次未完成的定时器，并复位到初始态（欢迎语大、居中）
+  projLoadingTimers.forEach(clearTimeout);
+  projLoadingTimers = [];
+  projLoadingEl.classList.remove('morph', 'hide');
+  pwWelcomeEl.style.transform = '';
+  pwWelcomeEl.style.opacity = '';
+  void projLoadingEl.offsetWidth;   // 强制回流，确保复位后再触发过渡
+
+  // 阶段 1：welcome 停留约 2s
+  projLoadingTimers.push(setTimeout(() => {
+    // 计算从「居中」到 kicker 的位移与缩放（画布坐标，需除以缩放系数 s）
+    const kicker = document.querySelector('#page-projects .sel-kicker');
+    if (kicker) {
+      const s = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--s')) || 1;
+      const w = pwWelcomeEl.getBoundingClientRect();
+      const k = kicker.getBoundingClientRect();
+      const scale = k.height / w.height;
+      const dx = (k.left - w.left) / s;
+      const dy = (k.top - w.top) / s;
+      pwWelcomeEl.style.transformOrigin = 'top left';
+      pwWelcomeEl.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+    }
+    projLoadingEl.classList.add('morph');
+    // 阶段 2：过渡完成后再整体淡出，露出真实页面
+    projLoadingTimers.push(setTimeout(() => {
+      projLoadingEl.classList.add('hide');
+    }, 950));
+  }, 2000));
+}
 
 /* ---------- 6. 初始渲染 ---------- */
 render();
