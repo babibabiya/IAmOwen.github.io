@@ -39,12 +39,7 @@ function setIntroScrolled(v) {
 function render() {
   for (const sec of ORDER) {
     PAGES[sec].forEach((el, i) => {
-      if (sec !== state.section) {
-        el.classList.remove('is-active', 'is-above');
-        return;
-      }
-      el.classList.toggle('is-active', i === state.index);
-      el.classList.toggle('is-above',  i <  state.index);
+      el.classList.toggle('is-active', sec === state.section && i === state.index);
     });
   }
 

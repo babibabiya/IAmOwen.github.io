@@ -74,14 +74,15 @@ button{
   opacity:0;
   visibility:hidden;
   pointer-events:none;
-  transition:opacity .5s ease,
-             visibility 0s linear .5s;
+  transition:opacity .6s ease,
+             visibility 0s linear .6s;
 }
 .screen.is-active{
   opacity:1;
   visibility:visible;
   pointer-events:auto;
-  transition:opacity .5s ease;
+  z-index:1;               /* 当前页始终在最上层，保证渐隐时新旧页稳定交叉过渡 */
+  transition:opacity .6s ease;
 }
 
 .s-hero  { background:#FFFFFF; }
