@@ -410,9 +410,9 @@ function startProjectLoading() {
     const angle0 = Math.atan2(dy0, dx0);
     // 每个泡泡不同：小角度摆动（保持原位附近，不绕到身后）、浮动幅度/频率、随机相位
     const sway   = 0.20 + (i % 3) * 0.09;             // 摆动角度幅度 rad（约 11~22°）
-    const speed  = 0.34 + (i % 4) * 0.10;             // 摆动速度 rad/s
+    const speed  = 0.17 + (i % 4) * 0.05;             // 摆动速度 rad/s（减半）
     const amp    = 6 + (i % 3) * 3;                   // 上下浮动幅度 px
-    const freq   = 0.30 + (i % 3) * 0.10;             // 浮动频率 Hz
+    const freq   = 0.15 + (i % 3) * 0.05;             // 浮动频率 Hz（减半）
     const phaseA = Math.random() * Math.PI * 2;       // 摆动相位
     const phaseF = Math.random() * Math.PI * 2;       // 浮动相位
     return { el: d, w, h, sx, sy, cx, cy, radius, angle0, sway, speed, amp, freq, phaseA, phaseF };

@@ -551,11 +551,11 @@ button{
   background:rgba(255,255,255,.55);
   filter:blur(1px);
 }
-.dot1{left:756px; top:166px; width:67px;  height:67px}
-.dot2{left:430px; top:244px; width:61px;  height:61px}
-.dot3{left:832px; top:287px; width:96px;  height:96px}
-.dot4{left:564px; top:463px; width:100px; height:100px}
-.dot5{left:843px; top:531px; width:96px;  height:96px}
+.dot1{left:746px; top:156px; width:87px;  height:87px}
+.dot2{left:420px; top:234px; width:81px;  height:81px}
+.dot3{left:822px; top:277px; width:116px; height:116px}
+.dot4{left:554px; top:453px; width:120px; height:120px}
+.dot5{left:833px; top:521px; width:116px; height:116px}
 
 /* 泡泡里的图标图片（位置/漂浮由 script.js 驱动：围绕人物摆动） */
 .dot img{
