@@ -497,6 +497,7 @@ button{
   display:grid;
   place-items:center;
   pointer-events:none;
+  z-index:5;
   background:radial-gradient(circle at 32% 28%,
     rgba(255,255,255,.92) 0%,
     rgba(214,255,246,.50) 34%,

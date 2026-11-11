@@ -385,7 +385,7 @@ function startProjectLoading() {
   }, 1400));
 }
 
-/* ---------- 5e. LIKES 页：泡泡围绕人物漂浮（随机上下 + 环绕旋转） ---------- */
+/* ---------- 5e. LIKES 页：泡泡在人物周围小幅度摆动漂浮（不绕到身后） ---------- */
 (function initLikesBubbles() {
   const shot = document.querySelector('#page-likes .shot-likes');
   const dots = [...document.querySelectorAll('#page-likes .dot')];
@@ -405,23 +405,24 @@ function startProjectLoading() {
     const dy0 = (sy + h / 2) - cy;
     const radius = Math.hypot(dx0, dy0);
     const angle0 = Math.atan2(dy0, dx0);
-    // 每个泡泡不同：环绕方向/速度、浮动幅度/频率、随机相位
-    const dir   = (i % 2 === 0) ? 1 : -1;
-    const speed = (0.10 + 0.045 * (i % 5)) * dir;   // rad/s（约 20~60s 一圈）
-    const amp   = 7 + (i % 4) * 3;                   // 上下浮动幅度 px
-    const freq  = 0.32 + (i % 3) * 0.12;             // 浮动频率 Hz
-    const phase = Math.random() * Math.PI * 2;       // 随机相位，避免齐步
-    return { el: d, w, h, sx, sy, cx, cy, radius, angle0, speed, amp, freq, phase };
+    // 每个泡泡不同：小角度摆动（保持原位附近，不绕到身后）、浮动幅度/频率、随机相位
+    const sway   = 0.20 + (i % 3) * 0.09;             // 摆动角度幅度 rad（约 11~22°）
+    const speed  = 0.34 + (i % 4) * 0.10;             // 摆动速度 rad/s
+    const amp    = 6 + (i % 3) * 3;                   // 上下浮动幅度 px
+    const freq   = 0.30 + (i % 3) * 0.10;             // 浮动频率 Hz
+    const phaseA = Math.random() * Math.PI * 2;       // 摆动相位
+    const phaseF = Math.random() * Math.PI * 2;       // 浮动相位
+    return { el: d, w, h, sx, sy, cx, cy, radius, angle0, sway, speed, amp, freq, phaseA, phaseF };
   });
 
   const t0 = performance.now();
   function tick(now) {
     const t = (now - t0) / 1000;
     for (const b of cfg) {
-      const angle = b.angle0 + b.speed * t;
+      const angle = b.angle0 + b.sway * Math.sin(b.speed * t + b.phaseA);
       const ox = b.cx + Math.cos(angle) * b.radius;
       const oy = b.cy + Math.sin(angle) * b.radius
-                 + b.amp * Math.sin(Math.PI * 2 * b.freq * t + b.phase);
+                 + b.amp * Math.sin(Math.PI * 2 * b.freq * t + b.phaseF);
       const tx = ox - b.w / 2 - b.sx;
       const ty = oy - b.h / 2 - b.sy;
       b.el.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
