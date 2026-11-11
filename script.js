@@ -335,10 +335,13 @@ document.querySelectorAll('.help-head').forEach((head) => {
   });
 });
 
-/* ---------- 5d. PROJECTS 进入加载动画：welcome → 上移缩小 → 变成 kicker ---------- */
+/* ---------- 5d. PROJECTS 进入加载动画 ----------
+   第一次进入：进度条 → welcome 上移缩小变成 kicker → 淡出
+   之后进入：只有进度条 → 直接淡出（不再播 welcome） ---------- */
 const projLoadingEl = document.getElementById('proj-loading');
 const pwWelcomeEl = document.getElementById('pw-welcome');
 let projLoadingTimers = [];
+let projectWelcomedOnce = false;   // 是否已播过 welcome 动画
 
 function startProjectLoading() {
   if (!projLoadingEl || !pwWelcomeEl) return;
@@ -352,27 +355,33 @@ function startProjectLoading() {
 
   // 阶段 A：横向进度条滚动约 1.4s
   projLoadingTimers.push(setTimeout(() => {
-    // 阶段 B：进度条淡出，welcome 淡入，停留约 1.8s
-    projLoadingEl.classList.add('stage2');
-    projLoadingTimers.push(setTimeout(() => {
-      // 阶段 C：welcome 上移缩小，变成 kicker
-      const kicker = document.querySelector('#page-projects .sel-kicker');
-      if (kicker) {
-        const s = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--s')) || 1;
-        const w = pwWelcomeEl.getBoundingClientRect();
-        const k = kicker.getBoundingClientRect();
-        const scale = k.height / w.height;
-        const dx = (k.left - w.left) / s;
-        const dy = (k.top - w.top) / s;
-        pwWelcomeEl.style.transformOrigin = 'top left';
-        pwWelcomeEl.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
-      }
-      projLoadingEl.classList.add('morph');
-      // 阶段 D：整体淡出，露出真实页面
+    if (!projectWelcomedOnce) {
+      // 第一次进入：进度条淡出 → welcome 淡入，停留约 1.8s
+      projectWelcomedOnce = true;
+      projLoadingEl.classList.add('stage2');
       projLoadingTimers.push(setTimeout(() => {
-        projLoadingEl.classList.add('hide');
-      }, 950));
-    }, 1800));
+        // welcome 上移缩小，变成 kicker
+        const kicker = document.querySelector('#page-projects .sel-kicker');
+        if (kicker) {
+          const s = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--s')) || 1;
+          const w = pwWelcomeEl.getBoundingClientRect();
+          const k = kicker.getBoundingClientRect();
+          const scale = k.height / w.height;
+          const dx = (k.left - w.left) / s;
+          const dy = (k.top - w.top) / s;
+          pwWelcomeEl.style.transformOrigin = 'top left';
+          pwWelcomeEl.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+        }
+        projLoadingEl.classList.add('morph');
+        // 整体淡出，露出真实页面
+        projLoadingTimers.push(setTimeout(() => {
+          projLoadingEl.classList.add('hide');
+        }, 950));
+      }, 1800));
+    } else {
+      // 之后进入：进度条滚完直接淡出，跳过 welcome
+      projLoadingEl.classList.add('hide');
+    }
   }, 1400));
 }
 
