@@ -77,7 +77,11 @@ function go(section, index = 0) {
   state.index = index;
   setIntroScrolled(false);   // 切页时 intro 滚回顶部
   render();
-  if (enteringProjectsSelect) startProjectLoading();
+  if (enteringProjectsSelect) {
+    projectIndex = 0;
+    renderProject();
+    startProjectLoading();
+  }
 }
 
 function move(delta) {
@@ -524,6 +528,35 @@ function resetLikesFocus() {
   if (likesSubEl)  likesSubEl.textContent = 'Select for more details';
   if (likesDescEl) likesDescEl.textContent = '';
 }
+
+/* ---------- 5f. PROJECTS 选择页：多项目轮播 ---------- */
+const PROJECT_LIST = [
+  { title: 'STUDY NOOK',   img: 'https://education-cos-1307366133.cos.ap-shanghai.myqcloud.com/教育平台官方/owenwu/assets/chick.png' },
+  { title: 'PETAL CANVAS', img: 'assets/project/petal-frame0.png' },
+  { title: '3D MODEL',     img: 'assets/project/shot1.png' },
+];
+const projTitleEl = document.getElementById('proj-title');
+const projImgEl = document.getElementById('proj-img');
+let projectIndex = 0;
+
+function renderProject() {
+  const p = PROJECT_LIST[projectIndex];
+  if (!p) return;
+  if (projTitleEl) projTitleEl.textContent = p.title;
+  if (projImgEl) {
+    projImgEl.src = p.img;
+    projImgEl.alt = p.title;
+  }
+}
+
+function stepProject(delta) {
+  projectIndex = (projectIndex + delta + PROJECT_LIST.length) % PROJECT_LIST.length;
+  renderProject();
+}
+
+document.querySelectorAll('[data-carousel]').forEach((el) => {
+  el.addEventListener('click', () => stepProject(Number(el.dataset.carousel)));
+});
 
 /* ---------- 6. 初始渲染 ---------- */
 render();
