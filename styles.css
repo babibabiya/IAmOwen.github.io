@@ -66,22 +66,23 @@ button{
   text-align:inherit;
 }
 
-/* ---------- screen shell（页面化：同一时刻只显示一页） ---------- */
+/* ---------- screen shell（页面化：同一时刻只显示一页，渐隐切换） ---------- */
 .screen{
   position:fixed;
   inset:0;
   overflow:hidden;
-  transform:translateY(103%);
+  opacity:0;
   visibility:hidden;
-  transition:transform .62s cubic-bezier(.77,0,.18,1),
-             visibility 0s linear .62s;
+  pointer-events:none;
+  transition:opacity .5s ease,
+             visibility 0s linear .5s;
 }
 .screen.is-active{
-  transform:translateY(0);
+  opacity:1;
   visibility:visible;
-  transition:transform .62s cubic-bezier(.77,0,.18,1);
+  pointer-events:auto;
+  transition:opacity .5s ease;
 }
-.screen.is-above{ transform:translateY(-103%); }
 
 .s-hero  { background:#FFFFFF; }
 .s-intro { background:#DDFEF8; }
