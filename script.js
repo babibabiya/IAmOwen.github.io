@@ -533,7 +533,7 @@ function resetLikesFocus() {
 const PROJECT_LIST = [
   { title: 'STUDY NOOK',   img: 'https://education-cos-1307366133.cos.ap-shanghai.myqcloud.com/教育平台官方/owenwu/assets/chick.png' },
   { title: 'PETAL CANVAS', img: 'assets/project/petal-frame0.png' },
-  { title: '3D MODEL',     img: 'assets/project/shot1.png' },
+  { title: 'PRM',          img: 'assets/project/prm.png' },
 ];
 const projTitleEl = document.getElementById('proj-title');
 const projImgEl = document.getElementById('proj-img');
