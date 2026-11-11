@@ -494,8 +494,38 @@ button{
    ========================================================= */
 .dot{
   border-radius:50%;
-  background:#A3FFEF;
+  display:grid;
+  place-items:center;
   pointer-events:none;
+  background:radial-gradient(circle at 32% 28%,
+    rgba(255,255,255,.92) 0%,
+    rgba(214,255,246,.50) 34%,
+    rgba(163,255,239,.28) 64%,
+    rgba(13,124,107,.32) 100%);
+  border:2px solid rgba(255,255,255,.55);
+  box-shadow:0 12px 30px rgba(13,124,107,.16),
+             inset 0 -8px 16px rgba(13,124,107,.14),
+             inset 0 6px 12px rgba(255,255,255,.45);
+  animation:bubblefloat 5s ease-in-out infinite;
+}
+.dot::before{
+  content:'';
+  position:absolute;
+  left:22%; top:14%;
+  width:24%; height:15%;
+  border-radius:50%;
+  background:rgba(255,255,255,.85);
+  transform:rotate(-22deg);
+  filter:blur(1.5px);
+}
+.dot::after{
+  content:'';
+  position:absolute;
+  right:17%; bottom:13%;
+  width:9%; height:6%;
+  border-radius:50%;
+  background:rgba(255,255,255,.55);
+  filter:blur(1px);
 }
 .dot1{left:756px; top:166px; width:67px;  height:67px}
 .dot2{left:430px; top:244px; width:61px;  height:61px}
@@ -503,6 +533,22 @@ button{
 .dot4{left:564px; top:463px; width:100px; height:100px}
 .dot5{left:843px; top:531px; width:96px;  height:96px}
 .dot6{left:365px; top:615px; width:126px; height:126px}
+
+/* 浮空节奏：不同泡泡速度/幅度/延时错开，更自然 */
+.dot1{--fy:-10px; font-size:30px; animation-duration:4.8s; animation-delay:0s}
+.dot2{--fy:-14px; font-size:28px; animation-duration:5.6s; animation-delay:.8s}
+.dot3{--fy:-16px; font-size:44px; animation-duration:5.0s; animation-delay:1.5s}
+.dot4{--fy:-13px; font-size:46px; animation-duration:6.2s; animation-delay:.4s}
+.dot5{--fy:-18px; font-size:44px; animation-duration:5.3s; animation-delay:2.0s}
+.dot6{--fy:-12px; font-size:58px; animation-duration:6.8s; animation-delay:1.0s}
+
+@keyframes bubblefloat{
+  0%,100%{ transform:translateY(0) }
+  50%     { transform:translateY(var(--fy,-12px)) }
+}
+@media (prefers-reduced-motion: reduce){
+  .dot{animation:none}
+}
 
 .likes-info{}
 #page-likes .info-name{left:939px}
