@@ -519,7 +519,8 @@ button{
   border-radius:50%;
   display:grid;
   place-items:center;
-  pointer-events:none;
+  pointer-events:auto;
+  cursor:pointer;
   z-index:5;
   background:radial-gradient(circle at 32% 28%,
     rgba(255,255,255,.92) 0%,
@@ -575,6 +576,32 @@ button{
   line-height:1.25;
   color:var(--gray);
   white-space:nowrap;
+}
+
+/* ---------- LIKES 点击聚焦：隐藏其他泡泡与人物，选中泡泡放大到中间，右侧显示名称+介绍 ---------- */
+.shot-likes{ transition:opacity .45s ease; }
+.dot{ transition:opacity .45s ease; }
+#page-likes.likes-open .shot-likes{ opacity:0; }
+#page-likes.likes-open .dot{ opacity:0; pointer-events:none; }
+#page-likes.likes-open .dot.is-focus{ opacity:1; pointer-events:auto; cursor:pointer; }
+#page-likes.likes-open .likes-sub{ opacity:0; }
+
+.likes-desc{
+  position:absolute;
+  left:939px; top:216px;
+  width:430px;
+  font-size:26px;
+  line-height:1.4;
+  color:var(--ink);
+  white-space:normal;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .45s ease .15s, visibility 0s linear .6s;
+}
+#page-likes.likes-open .likes-desc{
+  opacity:1;
+  visibility:visible;
+  transition:opacity .45s ease .25s;
 }
 
 /* =========================================================

@@ -71,6 +71,7 @@ function go(section, index = 0) {
   if (!PAGES[section]) return;
   index = Math.max(0, Math.min(index, PAGES[section].length - 1));
   if (section === state.section && index === state.index) return;
+  if (likesFocused) resetLikesFocus();   // 离开 LIKES 页时收起聚焦泡泡
   const enteringProjectsSelect = (section === 'projects' && index === 0 && state.section !== 'projects');
   state.section = section;
   state.index = index;
@@ -152,6 +153,7 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeModal();
     return;
   }
+  if (e.key === 'Escape' && likesFocused) { resetLikesFocus(); return; }
   if (state.section === 'about') return;   // about 部分只允许按钮切换
   if (['ArrowDown', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); move(1); }
   if (['ArrowUp',   'PageUp'].includes(e.key))        { e.preventDefault(); move(-1); }
@@ -388,52 +390,140 @@ function startProjectLoading() {
   }, 1400));
 }
 
-/* ---------- 5e. LIKES 页：泡泡在人物周围小幅度摆动漂浮（不绕到身后） ---------- */
+/* ---------- 5e. LIKES 页：泡泡在人物周围摆动漂浮 + 点击聚焦 ---------- */
+const likesSection = document.getElementById('page-likes');
+const likesShot = document.querySelector('#page-likes .shot-likes');
+const likesDots = [...document.querySelectorAll('#page-likes .dot')];
+const likesNameEl = document.querySelector('#page-likes .info-name');
+const likesSubEl = document.querySelector('#page-likes .likes-sub');
+const likesDescEl = document.querySelector('#page-likes .likes-desc');
+
+const likesBubbles = [];
+let likesRAF = null;
+let likesT0 = 0;
+let likesFocused = null;    // 当前聚焦的 dot 元素（null = 未聚焦）
+let likesReturning = null;  // 正在从中央归位的 dot
+
+// 画布中心（聚焦目标点，略偏上以平衡右侧文字）
+const FOCUS_X = 712, FOCUS_Y = 420, FOCUS_W = 340;
+
 (function initLikesBubbles() {
-  const shot = document.querySelector('#page-likes .shot-likes');
-  const dots = [...document.querySelectorAll('#page-likes .dot')];
-  if (!shot || !dots.length) return;
+  if (!likesSection || !likesDots.length || !likesShot) return;
 
-  // 尊重「减弱动态效果」
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cx = likesShot.offsetLeft + likesShot.offsetWidth / 2;
+  const cy = likesShot.offsetTop + likesShot.offsetHeight / 2;
 
-  // 人物（照片）中心，design 坐标
-  const cx = shot.offsetLeft + shot.offsetWidth / 2;
-  const cy = shot.offsetTop + shot.offsetHeight / 2;
-
-  const cfg = dots.map((d, i) => {
+  likesDots.forEach((d, i) => {
     const w = d.offsetWidth, h = d.offsetHeight;
     const sx = d.offsetLeft, sy = d.offsetTop;
     const dx0 = (sx + w / 2) - cx;
     const dy0 = (sy + h / 2) - cy;
     const radius = Math.hypot(dx0, dy0);
     const angle0 = Math.atan2(dy0, dx0);
-    // 每个泡泡不同：小角度摆动（保持原位附近，不绕到身后）、浮动幅度/频率、随机相位
-    const sway   = 0.20 + (i % 3) * 0.09;             // 摆动角度幅度 rad（约 11~22°）
-    const speed  = 0.17 + (i % 4) * 0.05;             // 摆动速度 rad/s（减半）
-    const amp    = 6 + (i % 3) * 3;                   // 上下浮动幅度 px
-    const freq   = 0.15 + (i % 3) * 0.05;             // 浮动频率 Hz（减半）
-    const phaseA = Math.random() * Math.PI * 2;       // 摆动相位
-    const phaseF = Math.random() * Math.PI * 2;       // 浮动相位
-    return { el: d, w, h, sx, sy, cx, cy, radius, angle0, sway, speed, amp, freq, phaseA, phaseF };
+    const b = {
+      el: d, w, h, sx, sy, cx, cy, radius, angle0,
+      sway:   0.20 + (i % 3) * 0.09,
+      speed:  0.17 + (i % 4) * 0.05,
+      amp:    6 + (i % 3) * 3,
+      freq:   0.15 + (i % 3) * 0.05,
+      phaseA: Math.random() * Math.PI * 2,
+      phaseF: Math.random() * Math.PI * 2,
+      tx: 0, ty: 0,
+    };
+    likesBubbles.push(b);
+    d.addEventListener('click', () => toggleLikesFocus(d));
   });
 
-  const t0 = performance.now();
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  likesT0 = performance.now();
   function tick(now) {
-    const t = (now - t0) / 1000;
-    for (const b of cfg) {
+    const t = (now - likesT0) / 1000;
+    for (const b of likesBubbles) {
       const angle = b.angle0 + b.sway * Math.sin(b.speed * t + b.phaseA);
       const ox = b.cx + Math.cos(angle) * b.radius;
       const oy = b.cy + Math.sin(angle) * b.radius
                  + b.amp * Math.sin(Math.PI * 2 * b.freq * t + b.phaseF);
-      const tx = ox - b.w / 2 - b.sx;
-      const ty = oy - b.h / 2 - b.sy;
-      b.el.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+      b.tx = ox - b.w / 2 - b.sx;
+      b.ty = oy - b.h / 2 - b.sy;
+      if (b.el !== likesFocused && b.el !== likesReturning) {   // 聚焦/归位中的泡泡由 WAAPI 接管 transform
+        b.el.style.transform = `translate3d(${b.tx}px, ${b.ty}px, 0)`;
+      }
     }
-    requestAnimationFrame(tick);
+    likesRAF = requestAnimationFrame(tick);
   }
-  requestAnimationFrame(tick);
+  likesRAF = requestAnimationFrame(tick);
 })();
+
+function toggleLikesFocus(dot) {
+  if (likesFocused === dot) { resetLikesFocus(); return; }
+  if (!likesSection) return;
+
+  // 若上一个泡泡还在归位动画中，直接取消
+  if (likesReturning) {
+    likesReturning.getAnimations().forEach((a) => a.cancel());
+    likesReturning = null;
+  }
+
+  likesFocused = dot;
+  likesSection.classList.add('likes-open');
+  dot.classList.add('is-focus');
+
+  const b = likesBubbles.find((x) => x.el === dot);
+  if (b) {
+    const k = FOCUS_W / b.w;
+    const tx2 = FOCUS_X - (b.sx + b.w / 2);
+    const ty2 = FOCUS_Y - (b.sy + b.h / 2);
+    dot.getAnimations().forEach((a) => a.cancel());
+    dot.animate([
+      { transform: `translate3d(${b.tx}px, ${b.ty}px, 0) scale(1)` },
+      { transform: `translate3d(${tx2}px, ${ty2}px, 0) scale(${k})` },
+    ], { duration: 680, easing: 'cubic-bezier(.22,.9,.28,1)', fill: 'forwards' });
+  }
+
+  if (likesNameEl) likesNameEl.textContent = dot.dataset.name || '';
+  if (likesSubEl)  likesSubEl.textContent = '';
+  if (likesDescEl) likesDescEl.textContent = dot.dataset.desc || '';
+}
+
+function resetLikesFocus() {
+  if (!likesSection) return;
+  const focused = likesFocused;
+  likesFocused = null;
+  likesSection.classList.remove('likes-open');
+  likesDots.forEach((d) => {
+    d.classList.remove('is-focus');
+    d.getAnimations().forEach((a) => a.cancel());
+  });
+
+  // 恢复所有泡泡到当前 orbit 位置（不能清空，否则非聚焦泡泡会闪回静态位置）
+  likesBubbles.forEach((b) => {
+    b.el.style.transform = `translate3d(${b.tx}px, ${b.ty}px, 0)`;
+  });
+
+  // 让聚焦的泡泡从中央平滑飞回原位
+  if (focused) {
+    const b = likesBubbles.find((x) => x.el === focused);
+    if (b) {
+      likesReturning = focused;
+      const k = FOCUS_W / b.w;
+      const tx2 = FOCUS_X - (b.sx + b.w / 2);
+      const ty2 = FOCUS_Y - (b.sy + b.h / 2);
+      focused.animate([
+        { transform: `translate3d(${tx2}px, ${ty2}px, 0) scale(${k})` },
+        { transform: `translate3d(${b.tx}px, ${b.ty}px, 0) scale(1)` },
+      ], { duration: 480, easing: 'cubic-bezier(.22,.9,.28,1)', fill: 'both' }).onfinish = () => {
+        likesReturning = null;
+        focused.getAnimations().forEach((a) => a.cancel());
+        focused.style.transform = `translate3d(${b.tx}px, ${b.ty}px, 0)`;
+      };
+    }
+  }
+
+  if (likesNameEl) likesNameEl.textContent = 'Unselected';
+  if (likesSubEl)  likesSubEl.textContent = 'Select for more details';
+  if (likesDescEl) likesDescEl.textContent = '';
+}
 
 /* ---------- 6. 初始渲染 ---------- */
 render();
