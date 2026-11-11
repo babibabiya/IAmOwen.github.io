@@ -175,6 +175,14 @@ const MODALS = {
     title: 'DESIGN PROCEDURE',
     body: `At first, we started fixing our target user and making a survey and collect answers in our school. After analyzing the data, we began to design the functions in our tool. \n\nBy applying knowledges we learned on class, gamification is the most important thing to make it contnuous so we combined it with a homework monitor so that users can finish their work efficiently.`,
   },
+  story: {
+    title: 'STORY',
+    body: `Bro hasn't finish school, wait 4 him to graduate.`,
+  },
+  achieve: {
+    title: 'ACHIEVEMENTS',
+    body: `Wut R U looking for?`,
+  },
 };
 
 const modal = document.getElementById('modal');
