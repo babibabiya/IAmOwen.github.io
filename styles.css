@@ -37,7 +37,7 @@
   --mint-lo:   #DEFFF9;
   --tag:       #93DFD1;
   --lil:       #8CFFEE;
-  --card:      #4B5F5B;
+  --card:      #E9FFFA;
   --s: 1;
 }
 
@@ -1116,7 +1116,7 @@ button{
   font-size:48px;
   font-weight:400;
   line-height:1.25;
-  color:#84F0E0;
+  color:#0D7C6B;
   white-space:nowrap;
 }
 .modal-body{
@@ -1124,7 +1124,7 @@ button{
   margin-top:36px;
   font-size:32px;
   line-height:1.25;
-  color:#FFFFFF;
+  color:#10241E;
   white-space:pre-wrap;
 }
 
