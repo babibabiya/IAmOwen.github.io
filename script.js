@@ -159,6 +159,10 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeModal();
     return;
   }
+  if (accessOverlay && accessOverlay.classList.contains('open')) {
+    if (e.key === 'Escape') hideAccessDenied();
+    return;
+  }
   if (e.key === 'Escape' && likesFocused) { resetLikesFocus(); return; }
   if (state.section === 'about') return;   // about 部分只允许按钮切换
   if (['ArrowDown', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); move(1); }
@@ -541,9 +545,9 @@ function resetLikesFocus() {
 
 /* ---------- 5f. PROJECTS 选择页：多项目轮播 ---------- */
 const PROJECT_LIST = [
-  { title: 'STUDY NOOK',   img: 'https://education-cos-1307366133.cos.ap-shanghai.myqcloud.com/教育平台官方/owenwu/assets/chick.png' },
-  { title: 'PETAL CANVAS', img: 'assets/project/petal-frame0.png' },
-  { title: 'PRM',          img: 'assets/project/prm.png' },
+  { title: 'STUDY NOOK',       img: 'https://education-cos-1307366133.cos.ap-shanghai.myqcloud.com/教育平台官方/owenwu/assets/chick.png' },
+  { title: 'COUNT YOUR SHEEP', img: 'assets/project/petal-frame0.png' },
+  { title: 'PRM',              img: 'assets/project/prm.png' },
 ];
 const projTitleEl = document.getElementById('proj-title');
 const projImgEl = document.getElementById('proj-img');
@@ -567,6 +571,35 @@ function stepProject(delta) {
 document.querySelectorAll('[data-carousel]').forEach((el) => {
   el.addEventListener('click', () => stepProject(Number(el.dataset.carousel)));
 });
+
+/* LEARN MORE：仅当当前选择是小鸡（STUDY NOOK, index 0）时进入详情页，否则显示 ACCESS DENIED */
+const accessOverlay = document.getElementById('access-overlay');
+const selMoreBtn = document.getElementById('sel-more');
+
+function showAccessDenied() {
+  if (!accessOverlay) return;
+  accessOverlay.classList.add('open');
+  accessOverlay.setAttribute('aria-hidden', 'false');
+  requestAnimationFrame(() => accessOverlay.classList.add('in'));
+}
+function hideAccessDenied() {
+  if (!accessOverlay) return;
+  accessOverlay.classList.remove('in');
+  accessOverlay.setAttribute('aria-hidden', 'true');
+  setTimeout(() => accessOverlay.classList.remove('open'), 220);
+}
+if (selMoreBtn) {
+  selMoreBtn.addEventListener('click', () => {
+    if (projectIndex === 0) {
+      go('projects', 1);
+    } else {
+      showAccessDenied();
+    }
+  });
+}
+if (accessOverlay) {
+  accessOverlay.addEventListener('click', hideAccessDenied);
+}
 
 /* ---------- 5g. TRAITS 页：点击 trait 展开蒙版 ---------- */
 const traitsSection = document.getElementById('page-traits');
