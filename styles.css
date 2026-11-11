@@ -556,15 +556,15 @@ button{
 .dot3{left:832px; top:287px; width:96px;  height:96px}
 .dot4{left:564px; top:463px; width:100px; height:100px}
 .dot5{left:843px; top:531px; width:96px;  height:96px}
-.dot6{left:365px; top:615px; width:126px; height:126px}
 
-/* 浮空节奏 + 更大的图标（位置/旋转由 script.js 驱动：围绕人物漂浮） */
-.dot1{font-size:40px}
-.dot2{font-size:36px}
-.dot3{font-size:56px}
-.dot4{font-size:58px}
-.dot5{font-size:56px}
-.dot6{font-size:72px}
+/* 泡泡里的图标图片（位置/漂浮由 script.js 驱动：围绕人物摆动） */
+.dot img{
+  width:78%;
+  height:78%;
+  object-fit:contain;
+  display:block;
+  pointer-events:none;
+}
 
 .likes-info{}
 #page-likes .info-name{left:939px}
