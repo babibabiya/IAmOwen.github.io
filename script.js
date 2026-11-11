@@ -385,5 +385,51 @@ function startProjectLoading() {
   }, 1400));
 }
 
+/* ---------- 5e. LIKES 页：泡泡围绕人物漂浮（随机上下 + 环绕旋转） ---------- */
+(function initLikesBubbles() {
+  const shot = document.querySelector('#page-likes .shot-likes');
+  const dots = [...document.querySelectorAll('#page-likes .dot')];
+  if (!shot || !dots.length) return;
+
+  // 尊重「减弱动态效果」
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  // 人物（照片）中心，design 坐标
+  const cx = shot.offsetLeft + shot.offsetWidth / 2;
+  const cy = shot.offsetTop + shot.offsetHeight / 2;
+
+  const cfg = dots.map((d, i) => {
+    const w = d.offsetWidth, h = d.offsetHeight;
+    const sx = d.offsetLeft, sy = d.offsetTop;
+    const dx0 = (sx + w / 2) - cx;
+    const dy0 = (sy + h / 2) - cy;
+    const radius = Math.hypot(dx0, dy0);
+    const angle0 = Math.atan2(dy0, dx0);
+    // 每个泡泡不同：环绕方向/速度、浮动幅度/频率、随机相位
+    const dir   = (i % 2 === 0) ? 1 : -1;
+    const speed = (0.10 + 0.045 * (i % 5)) * dir;   // rad/s（约 20~60s 一圈）
+    const amp   = 7 + (i % 4) * 3;                   // 上下浮动幅度 px
+    const freq  = 0.32 + (i % 3) * 0.12;             // 浮动频率 Hz
+    const phase = Math.random() * Math.PI * 2;       // 随机相位，避免齐步
+    return { el: d, w, h, sx, sy, cx, cy, radius, angle0, speed, amp, freq, phase };
+  });
+
+  const t0 = performance.now();
+  function tick(now) {
+    const t = (now - t0) / 1000;
+    for (const b of cfg) {
+      const angle = b.angle0 + b.speed * t;
+      const ox = b.cx + Math.cos(angle) * b.radius;
+      const oy = b.cy + Math.sin(angle) * b.radius
+                 + b.amp * Math.sin(Math.PI * 2 * b.freq * t + b.phase);
+      const tx = ox - b.w / 2 - b.sx;
+      const ty = oy - b.h / 2 - b.sy;
+      b.el.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
 /* ---------- 6. 初始渲染 ---------- */
 render();

@@ -506,7 +506,7 @@ button{
   box-shadow:0 12px 30px rgba(13,124,107,.16),
              inset 0 -8px 16px rgba(13,124,107,.14),
              inset 0 6px 12px rgba(255,255,255,.45);
-  animation:bubblefloat 5s ease-in-out infinite;
+  will-change:transform;
 }
 .dot::before{
   content:'';
@@ -534,21 +534,13 @@ button{
 .dot5{left:843px; top:531px; width:96px;  height:96px}
 .dot6{left:365px; top:615px; width:126px; height:126px}
 
-/* 浮空节奏：不同泡泡速度/幅度/延时错开，更自然 */
-.dot1{--fy:-10px; font-size:30px; animation-duration:4.8s; animation-delay:0s}
-.dot2{--fy:-14px; font-size:28px; animation-duration:5.6s; animation-delay:.8s}
-.dot3{--fy:-16px; font-size:44px; animation-duration:5.0s; animation-delay:1.5s}
-.dot4{--fy:-13px; font-size:46px; animation-duration:6.2s; animation-delay:.4s}
-.dot5{--fy:-18px; font-size:44px; animation-duration:5.3s; animation-delay:2.0s}
-.dot6{--fy:-12px; font-size:58px; animation-duration:6.8s; animation-delay:1.0s}
-
-@keyframes bubblefloat{
-  0%,100%{ transform:translateY(0) }
-  50%     { transform:translateY(var(--fy,-12px)) }
-}
-@media (prefers-reduced-motion: reduce){
-  .dot{animation:none}
-}
+/* 浮空节奏 + 更大的图标（位置/旋转由 script.js 驱动：围绕人物漂浮） */
+.dot1{font-size:40px}
+.dot2{font-size:36px}
+.dot3{font-size:56px}
+.dot4{font-size:58px}
+.dot5{font-size:56px}
+.dot6{font-size:72px}
 
 .likes-info{}
 #page-likes .info-name{left:939px}
