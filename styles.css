@@ -66,7 +66,9 @@ button{
   text-align:inherit;
 }
 
-/* ---------- screen shell（页面化：同一时刻只显示一页，渐隐切换） ---------- */
+/* ---------- screen shell（页面化：同一时刻只显示一页） ----------
+   默认（about / projects / help）渐隐切换；
+   home 内部（hero ↔ intro）保持原来的上下滑动翻页。 ---------- */
 .screen{
   position:fixed;
   inset:0;
@@ -81,8 +83,27 @@ button{
   opacity:1;
   visibility:visible;
   pointer-events:auto;
-  z-index:1;               /* 当前页始终在最上层，保证渐隐时新旧页稳定交叉过渡 */
+  z-index:1;               /* 当前页始终在最上层 */
   transition:opacity .6s ease;
+}
+
+/* home 内部：上下滑动翻页（不复用渐隐的 opacity） */
+.screen[data-section="home"]{
+  opacity:1;
+  transform:translateY(103%);
+  transition:transform .62s cubic-bezier(.77,0,.18,1),
+             visibility 0s linear .62s;
+}
+.screen[data-section="home"].is-active{
+  opacity:1;
+  transform:translateY(0);
+  visibility:visible;
+  pointer-events:auto;
+  z-index:1;
+  transition:transform .62s cubic-bezier(.77,0,.18,1);
+}
+.screen[data-section="home"].is-above{
+  transform:translateY(-103%);
 }
 
 .s-hero  { background:#FFFFFF; }

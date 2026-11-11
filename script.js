@@ -38,8 +38,16 @@ function setIntroScrolled(v) {
 
 function render() {
   for (const sec of ORDER) {
+    const isHome = sec === 'home';
     PAGES[sec].forEach((el, i) => {
-      el.classList.toggle('is-active', sec === state.section && i === state.index);
+      if (isHome) {
+        // home 内部：上下滑动翻页，需要 is-above 标记"滑到上方的旧页"
+        const inHome = sec === state.section;
+        el.classList.toggle('is-active', inHome && i === state.index);
+        el.classList.toggle('is-above',  inHome && i <  state.index);
+      } else {
+        el.classList.toggle('is-active', sec === state.section && i === state.index);
+      }
     });
   }
 
