@@ -670,6 +670,25 @@ button{
 /* =========================================================
    07 · PROJECTS (select)  /  08 · PROJECT DETAIL
    ========================================================= */
+/* 选择页背景：从下到上缓慢滑动的低透明度网格 */
+.proj-grid{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(10,215,185,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10,215,185,.05) 1px, transparent 1px);
+  background-size:80px 80px;
+  animation:grid-up 16s linear infinite;
+}
+@keyframes grid-up{
+  to{ background-position:0 -80px; }
+}
+@media (prefers-reduced-motion: reduce){
+  .proj-grid{ animation:none; }
+}
+
 .lines-a{left:0; top:0; width:361px; height:465px}
 .lines-b{left:1214px; top:595px; width:222px; height:320px}
 .p-lines-b{left:1220px; top:582px}
