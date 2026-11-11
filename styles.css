@@ -512,6 +512,44 @@ button{
 .tr3 .bubble svg{width:80px; height:64px}
 .tr4 .bubble svg{width:20px; height:79px}
 
+/* TRAITS 点击展开：左侧灰色蒙版 + 人物右滑 */
+#page-traits .trait{ cursor:pointer; }
+#page-traits .side,
+#page-traits .trait{ transition:opacity .35s ease; }
+.shot-traits{ transition:transform .5s cubic-bezier(.22,.9,.28,1); }
+
+.trait-mask{
+  left:0; top:0;
+  width:480px; height:900px;
+  background:rgba(120,126,124,.5);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .4s ease;
+  z-index:6;
+}
+.trait-mask-title{
+  position:absolute;
+  left:70px; top:120px;
+  font-size:52px;
+  font-weight:400;
+  line-height:1.25;
+  color:#0D7C6B;
+  white-space:nowrap;
+}
+.trait-mask-desc{
+  position:absolute;
+  left:70px; top:218px;
+  width:340px;
+  font-size:28px;
+  line-height:1.4;
+  color:#1A2B26;
+}
+
+#page-traits.traits-open .side,
+#page-traits.traits-open .trait{ opacity:0; pointer-events:none; }
+#page-traits.traits-open .shot-traits{ transform:translateX(240px); }
+#page-traits.traits-open .trait-mask{ opacity:1; pointer-events:auto; }
+
 /* =========================================================
    05 · LIKES
    ========================================================= */

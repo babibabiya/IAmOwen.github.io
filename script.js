@@ -72,6 +72,8 @@ function go(section, index = 0) {
   index = Math.max(0, Math.min(index, PAGES[section].length - 1));
   if (section === state.section && index === state.index) return;
   if (likesFocused) resetLikesFocus();   // 离开 LIKES 页时收起聚焦泡泡
+  const traitsSec = document.getElementById('page-traits');
+  if (traitsSec) traitsSec.classList.remove('traits-open');   // 离开 TRAITS 页时收起蒙版
   const enteringProjectsSelect = (section === 'projects' && index === 0 && state.section !== 'projects');
   state.section = section;
   state.index = index;
@@ -565,6 +567,25 @@ function stepProject(delta) {
 document.querySelectorAll('[data-carousel]').forEach((el) => {
   el.addEventListener('click', () => stepProject(Number(el.dataset.carousel)));
 });
+
+/* ---------- 5g. TRAITS 页：点击 trait 展开蒙版 ---------- */
+const traitsSection = document.getElementById('page-traits');
+const traitsBtns = [...document.querySelectorAll('#page-traits .trait')];
+const traitsMaskEl = document.getElementById('trait-mask');
+const traitsTitleEl = document.querySelector('#page-traits .trait-mask-title');
+const traitsDescEl = document.querySelector('#page-traits .trait-mask-desc');
+
+function openTrait(trait) {
+  if (!traitsSection) return;
+  traitsSection.classList.add('traits-open');
+  if (traitsTitleEl) traitsTitleEl.textContent = trait.dataset.title || 'UNKOWN';
+  if (traitsDescEl) traitsDescEl.textContent = trait.dataset.desc || 'Im lazy to finish';
+}
+function closeTrait() {
+  if (traitsSection) traitsSection.classList.remove('traits-open');
+}
+traitsBtns.forEach((t) => t.addEventListener('click', () => openTrait(t)));
+if (traitsMaskEl) traitsMaskEl.addEventListener('click', closeTrait);
 
 /* ---------- 6. 初始渲染 ---------- */
 render();
